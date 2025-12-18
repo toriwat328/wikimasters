@@ -1,5 +1,5 @@
 {
-  "id": "483c621d-d3ce-4ce9-9c64-6dc892f6c791",
+  "id": "b8a5ec34-1646-4663-b297-c0ef7c09357a",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -68,11 +68,10 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "articles_author_id_users_sync_id_fk": {
-          "name": "articles_author_id_users_sync_id_fk",
+        "articles_author_id_usersSync_id_fk": {
+          "name": "articles_author_id_usersSync_id_fk",
           "tableFrom": "articles",
-          "tableTo": "users_sync",
-          "schemaTo": "neon_auth",
+          "tableTo": "usersSync",
           "columnsFrom": ["author_id"],
           "columnsTo": ["id"],
           "onDelete": "no action",
@@ -87,6 +86,37 @@
           "columns": ["slug"]
         }
       },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.usersSync": {
+      "name": "usersSync",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false

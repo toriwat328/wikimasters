@@ -1,8 +1,7 @@
 import { eq } from "drizzle-orm";
-import { usersSync } from "drizzle-orm/neon";
 import redis from "@/cache";
 import db from "@/db/index";
-import { articles } from "@/db/schema";
+import { articles, usersSync } from "@/db/schema";
 
 // The list view selects only a subset of Article fields and adds the author's
 // resolved name. Use a dedicated type for the list response.

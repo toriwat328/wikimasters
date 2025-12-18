@@ -1,7 +1,6 @@
 import { eq } from "drizzle-orm";
-import { usersSync } from "drizzle-orm/neon";
 import db from "@/db";
-import { articles } from "@/db/schema";
+import { articles, usersSync } from "@/db/schema";
 import resend from "@/email";
 import CelebrationTemplate from "./templates/celebration-template";
 

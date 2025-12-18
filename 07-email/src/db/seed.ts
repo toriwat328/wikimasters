@@ -1,7 +1,6 @@
-import { usersSync } from "drizzle-orm/neon";
 import { seed } from "drizzle-seed";
 import db, { sql } from "@/db/index";
-import { articles } from "@/db/schema";
+import { articles, usersSync } from "@/db/schema";
 
 const SEED_COUNT = 25;
 const SEED = 1337;

@@ -1,4 +1,3 @@
-import { usersSync } from "drizzle-orm/neon";
 import { boolean, pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
 
 export const articles = pgTable("articles", {
@@ -20,3 +19,11 @@ export default schema;
 
 export type Article = typeof articles.$inferSelect;
 export type NewArticle = typeof articles.$inferInsert;
+
+// add this
+export const usersSync = pgTable("usersSync", {
+  id: text("id").primaryKey(), // Stack Auth user ID
+  name: text("name"),
+  email: text("email"),
+});
+export type User = typeof usersSync.$inferSelect;

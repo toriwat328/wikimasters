@@ -210,20 +210,20 @@ import { usersSync } from "drizzle-orm/neon";
 
 Change to:
 ```typescript
-import { users } from "@/db/schema";
+import { usersSync } from "@/db/schema";
 ```
 
 Update the query:
 ```typescript
 const response = await db
   .select({
-    email: users.email,
-    id: users.id,
+    email: usersSync.email,
+    id: usersSync.id,
     title: articles.title,
-    name: users.name,
+    name: usersSync.name,
   })
   .from(articles)
-  .leftJoin(users, eq(articles.authorId, users.id))
+  .leftJoin(usersSync, eq(articles.authorId, usersSync.id))
   .where(eq(articles.id, articleId));
 ```
 

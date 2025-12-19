@@ -98,7 +98,7 @@ export async function createArticle(data: CreateArticleInput) {
 Change `import { usersSync } from "drizzle-orm/neon"` to `import { usersSync } from "@/db/schema"` in:
 
 - `src/lib/data/articles.ts`
-- `src/db/seed.ts`
+- `src/db/seed.ts` (also updated to auto-create a seed user if none exist)
 - `src/email/celebration-email.tsx` (steps 07+)
 
 ---

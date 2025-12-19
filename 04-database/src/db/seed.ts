@@ -15,19 +15,23 @@ async function main() {
     await sql.query("TRUNCATE TABLE articles RESTART IDENTITY CASCADE;");
 
     console.log("🔎 Querying existing users...");
-    const users = await db
+    let users = await db
       .select({ id: usersSync.id })
       .from(usersSync)
       .orderBy(usersSync.id);
-    const ids = users.map((user) => user.id);
-    console.log(`👥 Found ${users.length} user(s)`);
 
     if (users.length === 0) {
-      console.error(
-        "❌ No users found in the database. Seed cannot assign authorId without existing users.",
-      );
-      process.exit(1);
+      console.log("👤 No users found, inserting default seed user...");
+      await db.insert(usersSync).values({
+        id: "seed-user-001",
+        name: "Seed User",
+        email: "seed@example.com",
+      });
+      users = [{ id: "seed-user-001" }];
     }
+
+    const ids = users.map((user) => user.id);
+    console.log(`👥 Using ${users.length} user(s)`);
 
     console.log("🍩 Using drizzle-seed...");
     await seed(db, { articles }, { seed: SEED }).refine((funcs) => ({

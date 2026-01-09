@@ -1,4 +1,4 @@
-import { pgTable, serial, text, timestamp, boolean } from "drizzle-orm/pg-core";
+import { boolean, pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
 
 export const articles = pgTable("articles", {
   id: serial("id").primaryKey(),
@@ -22,7 +22,7 @@ export type NewArticle = typeof articles.$inferInsert;
 
 // add this
 export const usersSync = pgTable("usersSync", {
-  id: text("id").primaryKey(),  // Stack Auth user ID
+  id: text("id").primaryKey(), // Stack Auth user ID
   name: text("name"),
   email: text("email"),
 });

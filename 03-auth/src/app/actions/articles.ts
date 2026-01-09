@@ -1,13 +1,12 @@
 "use server";
 
-import { redirect } from "next/navigation";
-import { stackServerApp } from "@/stack/server";
-import { ensureUserExists } from "@/db/sync-user";
 import { eq } from "drizzle-orm";
+import { redirect } from "next/navigation";
+import { authorizeUserToEditArticle } from "@/db/authz";
 import db from "@/db/index";
 import { articles } from "@/db/schema";
-import { authorizeUserToEditArticle } from "@/db/authz";
-
+import { ensureUserExists } from "@/db/sync-user";
+import { stackServerApp } from "@/stack/server";
 
 // Server actions for articles (stubs)
 // TODO: Replace with real database operations when ready
@@ -25,7 +24,6 @@ export type UpdateArticleInput = {
   imageUrl?: string;
 };
 
-
 export async function createArticle(data: CreateArticleInput) {
   const user = await stackServerApp.getUser();
   if (!user) {
@@ -33,7 +31,7 @@ export async function createArticle(data: CreateArticleInput) {
   }
   console.log("✨ createArticle called:", data);
 
-  await ensureUserExists(user);  // ADD THIS LINE
+  await ensureUserExists(user); // ADD THIS LINE
 
   await db.insert(articles).values({
     title: data.title,
@@ -97,6 +95,4 @@ export async function deleteArticleForm(formData: FormData): Promise<void> {
   await deleteArticle(String(id));
   // After deleting, redirect the user back to the homepage.
   redirect("/");
-
 }
-

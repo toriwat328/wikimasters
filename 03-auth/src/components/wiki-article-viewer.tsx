@@ -1,15 +1,14 @@
 "use client";
 
-import { Calendar, ChevronRight, Edit, Home, User, Eye} from "lucide-react";
+import { Calendar, ChevronRight, Edit, Eye, Home, User } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
+import { incrementPageview } from "@/app/actions/pageviews";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { incrementPageview } from "@/app/actions/pageviews";
-import { useState, useEffect } from "react";
-
 
 interface ViewerArticle {
   title: string;
@@ -41,7 +40,6 @@ export default function WikiArticleViewer({
     });
   };
 
-  
   useEffect(() => {
     async function fetchPageview() {
       const newCount = await incrementPageview(article.id);
@@ -84,9 +82,9 @@ export default function WikiArticleViewer({
             </div>
             <Badge variant="secondary">Article</Badge>
             <div className="ml-3 flex items-center text-sm text-muted-foreground">
-            <Eye className="h-4 w-4 mr-1" />
-            <span>{localPageviews ? localPageviews : "—"}</span>
-            <span className="ml-1">views</span>
+              <Eye className="h-4 w-4 mr-1" />
+              <span>{localPageviews ? localPageviews : "—"}</span>
+              <span className="ml-1">views</span>
             </div>
           </div>
         </div>

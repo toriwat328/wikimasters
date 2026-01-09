@@ -2,13 +2,12 @@
 
 import { eq } from "drizzle-orm";
 import { redirect } from "next/navigation";
+import redis from "@/cache";
 import { authorizeUserToEditArticle } from "@/db/authz";
 import db from "@/db/index";
 import { articles } from "@/db/schema";
 import { ensureUserExists } from "@/db/sync-user";
 import { stackServerApp } from "@/stack/server";
-import redis from "@/cache";
-
 
 // Server actions for articles (stubs)
 // TODO: Replace with real database operations when ready
@@ -67,7 +66,7 @@ export async function updateArticle(id: string, data: UpdateArticleInput) {
     .set({
       title: data.title,
       content: data.content,
-      imageUrl: data.imageUrl ?? undefined
+      imageUrl: data.imageUrl ?? undefined,
     })
     .where(eq(articles.id, +id));
 

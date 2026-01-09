@@ -34,6 +34,8 @@ export async function createArticle(data: CreateArticleInput) {
 
   await ensureUserExists(user); // ADD THIS LINE
 
+  //const summary = await summarizeArticle(data.title || "", data.content || "");
+
   await db.insert(articles).values({
     title: data.title,
     content: data.content,
@@ -41,6 +43,7 @@ export async function createArticle(data: CreateArticleInput) {
     published: true,
     authorId: user.id,
     imageUrl: data.imageUrl ?? undefined,
+    //summary,
   });
 
   redis.del("articles:all");
@@ -61,12 +64,15 @@ export async function updateArticle(id: string, data: UpdateArticleInput) {
   // TODO: Replace with actual database update
   console.log("📝 updateArticle called:", { id, ...data });
 
-  await db
+  //const summary = await summarizeArticle(data.title || "", data.content || "");
+
+  const _response = await db
     .update(articles)
     .set({
       title: data.title,
       content: data.content,
       imageUrl: data.imageUrl ?? undefined,
+      //summary: summary ?? undefined,
     })
     .where(eq(articles.id, +id));
 

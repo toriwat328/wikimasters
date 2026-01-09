@@ -1,10 +1,19 @@
 "use client";
 
-import { Calendar, ChevronRight, Edit, Eye, Home, User } from "lucide-react";
+import {
+  Calendar,
+  ChevronRight,
+  Edit,
+  Eye,
+  Home,
+  Trash,
+  User,
+} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
+import { deleteArticleForm } from "@/app/actions/articles";
 import { incrementPageview } from "@/app/actions/pageviews";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -22,13 +31,23 @@ interface ViewerArticle {
 interface WikiArticleViewerProps {
   article: ViewerArticle;
   canEdit?: boolean;
+  pageviews?: number | null;
 }
 
 export default function WikiArticleViewer({
   article,
   canEdit = false,
 }: WikiArticleViewerProps) {
-  const [localPageviews, setLocalPageviews] = useState(0);
+  // local state to show updated pageviews after increment
+  const [localPageviews, setLocalPageviews] = useState<number | null>(null);
+
+  useEffect(() => {
+    async function fetchPageview() {
+      const newCount = await incrementPageview(article.id);
+      setLocalPageviews(newCount ?? null);
+    }
+    fetchPageview();
+  }, [article.id]);
 
   // Format date for display
   const formatDate = (dateString: string) => {
@@ -39,14 +58,6 @@ export default function WikiArticleViewer({
       day: "numeric",
     });
   };
-
-  useEffect(() => {
-    async function fetchPageview() {
-      const newCount = await incrementPageview(article.id);
-      setLocalPageviews(newCount ?? null);
-    }
-    fetchPageview();
-  }, [article.id]);
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl">
@@ -74,29 +85,46 @@ export default function WikiArticleViewer({
           <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
             <div className="flex items-center">
               <User className="h-4 w-4 mr-1" />
-              <span>By {article.author}</span>
+              <span>By {article.author ?? "Unknown"}</span>
             </div>
             <div className="flex items-center">
               <Calendar className="h-4 w-4 mr-1" />
               <span>{formatDate(article.createdAt)}</span>
             </div>
-            <Badge variant="secondary">Article</Badge>
-            <div className="ml-3 flex items-center text-sm text-muted-foreground">
-              <Eye className="h-4 w-4 mr-1" />
-              <span>{localPageviews ? localPageviews : "—"}</span>
-              <span className="ml-1">views</span>
+            <div className="flex items-center">
+              <Badge variant="secondary">Article</Badge>
+              <div className="ml-3 flex items-center text-sm text-muted-foreground">
+                <Eye className="h-4 w-4 mr-1" />
+                <span>{localPageviews ? localPageviews : "—"}</span>
+                <span className="ml-1">views</span>
+              </div>
             </div>
           </div>
         </div>
 
         {/* Edit Button - Only shown if user has edit permissions */}
         {canEdit && (
-          <Link href={`/wiki/edit/${article.id}`} className="ml-4">
-            <Button variant="outline">
-              <Edit className="h-4 w-4 mr-2" />
-              Edit Article
-            </Button>
-          </Link>
+          <div className="ml-4 flex items-center gap-2">
+            <Link href={`/wiki/edit/${article.id}`} className="cursor-pointer">
+              <Button variant="outline" className="cursor-pointer">
+                <Edit className="h-4 w-4 mr-2" />
+                Edit Article
+              </Button>
+            </Link>
+
+            {/* Delete form calls the server action wrapper */}
+            <form action={deleteArticleForm}>
+              <input type="hidden" name="id" value={String(article.id)} />
+              <Button
+                type="submit"
+                variant="destructive"
+                className="ml-2 cursor-pointer"
+              >
+                <Trash className="h-4 w-4 mr-2" />
+                Delete
+              </Button>
+            </form>
+          </div>
         )}
       </div>
 
@@ -220,12 +248,26 @@ export default function WikiArticleViewer({
         </Link>
 
         {canEdit && (
-          <Link href={`/wiki/edit/${article.id}`}>
-            <Button>
-              <Edit className="h-4 w-4 mr-2" />
-              Edit This Article
-            </Button>
-          </Link>
+          <div className="flex items-center gap-2">
+            <Link href={`/wiki/edit/${article.id}`} className="cursor-pointer">
+              <Button className="cursor-pointer">
+                <Edit className="h-4 w-4 mr-2" />
+                Edit This Article
+              </Button>
+            </Link>
+
+            <form action={deleteArticleForm}>
+              <input type="hidden" name="id" value={String(article.id)} />
+              <Button
+                type="submit"
+                variant="destructive"
+                className="cursor-pointer"
+              >
+                <Trash className="h-4 w-4 mr-2" />
+                Delete
+              </Button>
+            </form>
+          </div>
         )}
       </div>
     </div>

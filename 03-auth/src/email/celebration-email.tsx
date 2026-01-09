@@ -35,27 +35,27 @@ export default async function sendCelebrationEmail(
 
   // OPTION 1: this only works if you've set up your own custom domain on Resend like I have
   //const emailRes = await resend.emails.send({
-   // from: "Wikimasters <noreply@mail.holt.courses>", // should be your domain
-   // to: email,
-   // subject: `✨ You article got ${pageviews} views! ✨`,
-   // html: "<h1>Congrats!</h1><p>You're an amazing author!</p>",
- // });
+  // from: "Wikimasters <noreply@mail.holt.courses>", // should be your domain
+  // to: email,
+  // subject: `✨ You article got ${pageviews} views! ✨`,
+  // html: "<h1>Congrats!</h1><p>You're an amazing author!</p>",
+  // });
 
   // OPTION 2: If you haven't set up a custom domain (development/testing)
   // Uncomment this and comment out Option 1:
-    const emailRes = await resend.emails.send({
-       from: "Wikimasters <onboarding@resend.dev>", // I believe it only lets you send from Resend if you haven't set up your domain
-       to: email, // unless you set up your own domain, you can only email yourself
-       subject: `✨ You article got ${pageviews} views! ✨`,
-       react: (
-        <CelebrationTemplate
-          articleTitle={title}
-          articleUrl={`${BASE_URL}/wiki/${articleId}`}
-          name={name ?? "Friend"}
-          pageviews={pageviews}
-        />
-      ),
-     });
+  const emailRes = await resend.emails.send({
+    from: "Wikimasters <onboarding@resend.dev>", // I believe it only lets you send from Resend if you haven't set up your domain
+    to: email, // unless you set up your own domain, you can only email yourself
+    subject: `✨ You article got ${pageviews} views! ✨`,
+    react: (
+      <CelebrationTemplate
+        articleTitle={title}
+        articleUrl={`${BASE_URL}/wiki/${articleId}`}
+        name={name ?? "Friend"}
+        pageviews={pageviews}
+      />
+    ),
+  });
 
   if (!emailRes.error) {
     console.log(
